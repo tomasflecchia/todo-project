@@ -13,7 +13,7 @@ requests>=2.32,<2.33
 # Login, seguridad y rate limiting
 Flask-Login>=0.6,<0.7
 Flask-Talisman>=1.0,<2.0
-Flask-Limiter>=2.10,<3.0
+Flask-Limiter
 
 # Servidor de producción
 gunicorn>=21.2,<22
