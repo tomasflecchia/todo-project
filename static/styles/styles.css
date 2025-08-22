@@ -1,0 +1,42 @@
+.task-done {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.list_name {
+    min-width: 200px;
+    flex: 1;
+}
+
+.list_btn {
+    height: 50px;
+    flex: 1;            /* todos ocupan el mismo espacio */
+    min-width: 160px;   /* que no sean demasiado chicos */
+}
+
+.dropdown .dropdown-toggle {
+    height: 50px;
+    flex: 1;
+    min-width: 220px;
+}
+
+.white_text {
+    color: white;
+}
+
+.register-login-link {
+    text-decoration: none;
+}
+
+@media (max-width: 1040px) {
+    .list-form {
+        flex-direction: column !important;
+        align-items: stretch !important; /* para que los inputs tomen todo el ancho */
+    }
+}
+
+@media (max-width: 780px) {
+  .hide-on-small {
+    display: none !important;
+  }
+}

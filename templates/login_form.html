@@ -1,0 +1,29 @@
+<!-- Login Modal -->
+<div class="modal fade" id="popupFormModal" tabindex="-1" aria-labelledby="popupFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" method="POST" action="{{ url_for('login_form') }}">
+      <div class="modal-header">
+        <h5 class="modal-title" id="popupFormModalLabel">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="text-align: left; font-family: 'Inter', sans-serif;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+          <input type="email" class="form-control" placeholder="e-mail" id="login-email" name="login-email" required>
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control" placeholder="Password" id="login-password" name="login-password" required>
+        </div>
+        <span class="text-muted small">
+          Don't have an account?
+          <a href="#" class="register-login-link" data-bs-toggle="modal" data-bs-target="#popupFormModalRegister"
+             data-bs-dismiss="modal">Register</a>
+        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </form>
+  </div>
+</div>
