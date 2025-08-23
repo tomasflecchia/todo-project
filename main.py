@@ -14,7 +14,7 @@ from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/todo-project/static')
 
 app.config['APPLICATION_ROOT'] = '/todo-project'
 
@@ -33,6 +33,13 @@ app.config.update(
 )
 
 db = SQLAlchemy(app)
+
+
+# Crear tablas automáticamente en Postgres o SQLite
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
