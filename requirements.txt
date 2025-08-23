@@ -17,3 +17,4 @@ Flask-Limiter
 
 # Servidor de producción
 gunicorn>=21.2,<22
+psycopg2-binary
