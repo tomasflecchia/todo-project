@@ -19,24 +19,32 @@ app = Flask(__name__, static_url_path='/todo-project/static')
 app.config['APPLICATION_ROOT'] = '/todo-project'
 
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "dev-secret")
-csrf = CSRFProtect(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'sqlite:///local.db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax"
-)
+if os.environ.get("FLASK_ENV") == "production":
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax"
+    )
+else:
+    app.config.update(
+        SESSION_COOKIE_SECURE=False,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax"
+    )
 
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+csrf = CSRFProtect(app)
 
 # ----------------------------
 # Talisman: HTTPS + HSTS + CSP
