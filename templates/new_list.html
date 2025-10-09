@@ -9,7 +9,6 @@
             <label for="list_name" class="form-label">List Name</label>
             <input type="text" class="form-control" name="list_name" placeholder="My to-do list" required autofocus>
         </div>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn-primary">Create List</button>
         <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
     </form>

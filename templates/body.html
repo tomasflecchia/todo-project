@@ -2,7 +2,7 @@
     <!-- Top bar with list controls -->
     <div class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <form method="POST" class="list-form d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
             <input type="hidden" name="list_id" value="{{ todo_list.id }}">
             <input type="text" name="list_name" class="list_name form-control"
                    placeholder="My to-do list" value="{{ todo_list.title }}">
@@ -56,7 +56,7 @@
     <!-- Task input form -->
     <div class="my-4">
         <form method="POST" action="{{ url_for('submit_task') }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
             <input type="hidden" name="list_id" value="{{ todo_list.id }}">
             <div class="input-group input-group-lg">
                 <input type="text" name="task" class="form-control" placeholder="Type your task here...">
@@ -72,7 +72,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center {% if task.is_done %}task-done{% endif %}">
                     <form method="POST" action="{{ url_for('edit_task', task_id=task.id) }}"
                           class="d-flex flex-grow-1 gap-2 align-items-center">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
                         <input type="checkbox" name="is_done" value="1"
                                {% if task.is_done %}checked{% endif %}
                                style="width:24px;height:24px;">
@@ -92,7 +92,7 @@
                     <!-- Delete button -->
                     <div class="btn-group ms-2">
                         <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            
                             <button class="btn btn-sm btn-danger d-none d-md-inline-flex" type="submit">
                                 Delete
                             </button>
