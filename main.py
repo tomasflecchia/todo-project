@@ -14,9 +14,7 @@ from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
-app = Flask(__name__, static_url_path='/todo-project/static')
-
-app.config['APPLICATION_ROOT'] = '/todo-project'
+app = Flask(__name__, static_url_path='/static')
 
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "dev-secret")
 
@@ -24,6 +22,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'sqlite:///local.db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+csrf = CSRFProtect(app)
 
 if os.environ.get("FLASK_ENV") == "production":
     app.config.update(
@@ -43,8 +43,6 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
-csrf = CSRFProtect(app)
 
 # ----------------------------
 # Talisman: HTTPS + HSTS + CSP
@@ -178,6 +176,7 @@ def create_or_update_list(list_id: int | None, title: str | None = None) -> Todo
 # -------------------- Routes --------------------
 
 @app.route('/')
+@csrf.exempt
 def index():
     owner_id, session_id = get_current_owner()
     all_lists = (TodoList.query.filter_by(owner_id=owner_id).order_by(TodoList.title).all()
@@ -193,6 +192,7 @@ def index():
 # ------------ List Actions ------------
 
 @app.route('/save-list', methods=['POST'])
+@csrf.exempt
 def save_list():
     list_id = request.form.get("list_id", type=int)
     list_name = request.form.get("list_name") or "My to-do list"
@@ -202,6 +202,7 @@ def save_list():
 
 
 @app.route('/delete-list', methods=['POST'])
+@csrf.exempt
 def delete_list():
     list_id = request.form.get("list_id", type=int)
     todo_list = get_user_list(list_id)
@@ -218,6 +219,7 @@ def delete_list():
 
 @app.route('/new-list', methods=['GET', 'POST'])
 @login_required
+@csrf.exempt
 def new_list():
     if request.method == 'POST':
         list_name = request.form.get('list_name') or "My to-do list"
@@ -232,6 +234,7 @@ def new_list():
 # ------------ Task Actions ------------
 
 @app.route('/submit-task', methods=['POST'])
+@csrf.exempt
 def submit_task():
     list_id = request.form.get("list_id", type=int)
     task_title = request.form.get("task")
@@ -247,6 +250,7 @@ def submit_task():
 
 
 @app.route('/task/<int:task_id>/delete', methods=['POST'])
+@csrf.exempt
 def delete_task(task_id):
     task = get_task_or_404(task_id)
     db.session.delete(task)
@@ -255,6 +259,7 @@ def delete_task(task_id):
 
 
 @app.route('/task/<int:task_id>/toggle', methods=['POST'])
+@csrf.exempt
 def toggle_task(task_id):
     task = get_task_or_404(task_id)
     task.is_done = not task.is_done
@@ -263,6 +268,7 @@ def toggle_task(task_id):
 
 
 @app.route('/task/<int:task_id>/edit', methods=['POST'])
+@csrf.exempt
 def edit_task(task_id):
     task = get_task_or_404(task_id)
     task.title = request.form.get("title")
@@ -290,14 +296,18 @@ def is_strong_password(password):
     return True
 
 
+redis_url = os.environ.get("REDIS_URL", "memory://")  # Fallback for local dev
+
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"]
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri=redis_url
 )
 
 
 @app.post('/login-form')
+@csrf.exempt
 @limiter.limit("5 per 15 minutes")
 def login_form():
     email = request.form.get('login-email', '').strip().lower()
@@ -323,6 +333,7 @@ def login_form():
 
 
 @app.route('/register-form', methods=['POST'])
+@csrf.exempt
 @limiter.limit("10 per 15 minutes")
 def register_form():
     email = request.form.get('register-email', '').strip().lower()
@@ -347,6 +358,7 @@ def register_form():
 
 @app.post('/logout')
 @login_required
+@csrf.exempt
 def logout():
     logout_user()
     flash("Logged out successfully.", "info")
