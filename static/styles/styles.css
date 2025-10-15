@@ -40,3 +40,61 @@
     display: none !important;
   }
 }
+
+.code-btn {
+  color: #1E3A8A; /* Text and border color */
+  border: 2px solid #1E3A8A;
+  border-radius: 50px; /* Fully rounded */
+  background-color: transparent;
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+}
+
+.code-btn:hover {
+  background-color: #181717;
+  color: white !important;
+}
+
+.fancy-link {
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+  color: black;
+  text-decoration: none;
+  padding: 0.2em 0.5em;
+  margin: 0 1.5em;
+  z-index: 1;
+}
+
+.fancy-logo {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+
+.fancy-logo img {
+  display: block;
+  position: relative;
+  z-index: 2; /* keep logo above overlay */
+}
+
+.fancy-logo::before {
+  content: '';
+  position: absolute;
+  top: 10%;       /* leave padding around the letters */
+  left: 3%;
+  width: 82%;
+  height: 80%;
+  background-color: #F7B801;
+  z-index: 1;     /* behind the logo */
+  opacity: 0;     /* start transparent */
+
+  transform: scaleY(0.1);
+  transform-origin: bottom;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.fancy-logo:hover::before {
+  transform: scaleY(1);
+  opacity: 1;
+}
