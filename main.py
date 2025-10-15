@@ -58,7 +58,7 @@ csp = {
     'font-src': [
         "'self'",
         "https://fonts.gstatic.com",       # Google Fonts
-        "https://cdn.jsdelivr.net"         # Bootstrap Icons fonts
+        "https://cdn.jsdelivr.net",         # Bootstrap Icons fonts
         "https://cdnjs.cloudflare.com"     # Font Awesome fonts
     ],
     'script-src': [
